@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>I Said What I Meant</title>
+    <style>
+      body {
+        text-align: center;
+        margin-top: 200px;
+      }
+      p {
+        margin-bottom: 50px;
+      }
+      #in {
+        width: 378px;
+        height: 200px;
+        padding: 12px;
+        margin-bottom: 50px;
+        resize: none;
+        background-color: rgb(242, 243, 245);
+        border-radius: 18px;
+        line-height: 16px;
+        outline: none;
+        border: none;
+        box-shadow: none;
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 13px;
+      }
+      #copy {
+        width: 200px;
+        border: none;
+        background: none;
+      }
+      #copy:not([disabled]) {
+        cursor: pointer;
+        color: rgb(56, 88, 152);
+      }
+      #copy:hover:not(:disabled) {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      I Said What I Meant
+    </h1>
+    <p>
+      Prevent your ASCII art from being mutilated by Facebook and others (who remove duplicate spaces) by padding each space with the <a href="https://en.wikipedia.org/wiki/Zero-width_space">zero-width space</a>.
+    </p>
+
+    <textarea id="in" type="text" placeholder="Write a comment..." /></textarea>
+    <br />
+    <button id="copy">Copy to clipboard</button>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"
+      integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autosize.js/4.0.2/autosize.min.js"></script>
+    <script>
+      const zeroWidthSpace = '\u200B'
+      const $input = document.getElementById("in");
+      const $btn = document.getElementById("copy");
+      const preserveWhitespace = text => zeroWidthSpace + '\n' + text.split('').join(zeroWidthSpace)
+
+      const clipboard = new ClipboardJS("#copy", {
+        text: () => preserveWhitespace($input.value)
+      });
+
+      autosize($input)
+
+      clipboard.on("success", e => {
+        $btn.innerHTML = "Copied!";
+        $btn.setAttribute("disabled", true);
+      });
+
+      $input.addEventListener("input", () => {
+        $btn.innerHTML = "Copy to clipboard";
+        $btn.removeAttribute("disabled");
+      });
+    </script>
+  </body>
+</html>
